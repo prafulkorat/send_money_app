@@ -1,16 +1,127 @@
-# flutter_app
+# Send Money App
 
-A new Flutter project.
+A Flutter application for sending money with offline support, using GetX for state management and `https://jsonplaceholder.typicode.com` as the API.
 
-## Getting Started
+---
 
-This project is a starting point for a Flutter application.
+## Features
 
-A few resources to get you started if this is your first Flutter project:
+1. Login Screen with username and password authentication.
+2. Dashboard:
+    - Show/Hide Wallet Balance.
+    - Navigate to Send Money or Transaction History screens.
+3. Send Money Screen:
+    - Input amount to send.
+    - Displays a success or error message.
+4. Transaction History Screen:
+    - Displays a list of transactions from the API.
+    - Cached offline support.
+5. Offline Mode:
+    - Shows cached data when offline.
+    - Updates when back online.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+---
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## How to Run the Project
+
+### Prerequisites
+
+1. Install [Flutter](https://docs.flutter.dev/get-started/install) on your system.
+2. Install a code editor (e.g., [VS Code](https://code.visualstudio.com/)).
+3. Install an Android/iOS emulator or connect a real device.
+
+### Steps
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/prafulkorat/send_money_app
+   cd send_money_app
+
+Directory Structure
+
+lib/
+├── main.dart
+├── models/
+│   ├── transaction_model.dart
+│   └── user_model.dart
+├── views/
+│   ├── login_screen.dart
+│   ├── dashboard_screen.dart
+│   ├── send_money_screen.dart
+│   └── transaction_history_screen.dart
+├── controllers/
+│   ├── auth_controller.dart
+│   ├── dashboard_controller.dart
+│   └── transactions_controller.dart
+├── services/
+│   ├── api_service.dart
+│   └── local_storage_service.dart
+└── bindings/
+├── initial_binding.dart
+
+
+
+
+classDiagram
+
+    class AuthController {
+    -TextEditingController usernameController
+    -TextEditingController passwordController
+    +void login()
+    +void logout()
+    }
+
+    class DashboardController {
+        -UserModel user
+        -RxBool isBalanceHidden
+        -TextEditingController amountController
+        +void toggleBalance()
+        +void sendMoney()
+        +void logout()
+    }
+
+    class TransactionsController {
+        -RxList<TransactionModel> transactions
+        -RxBool isLoading
+        +void fetchTransactions()
+    }
+
+    class TransactionModel {
+        -int id
+        -double amount
+        -String date
+        +TransactionModel.fromJson(Map<String, dynamic>)
+    }
+
+    AuthController --> DashboardController
+    DashboardController --> TransactionModel
+    TransactionsController --> TransactionModel
+
+
+sequenceDiagram - Login Flow
+
+    participant User
+    participant LoginScreen
+    participant AuthController
+    participant DashboardScreen
+
+    User ->> LoginScreen: Enter username & password
+    LoginScreen ->> AuthController: Call login()
+    AuthController ->> AuthController: Validate credentials
+    AuthController ->> DashboardScreen: Navigate to dashboard
+
+
+
+sequenceDiagram - Send Money Flow
+
+    participant User
+    participant SendMoneyScreen
+    participant DashboardController
+    participant ApiService
+
+    User ->> SendMoneyScreen: Enter amount
+    SendMoneyScreen ->> DashboardController: Call sendMoney()
+    DashboardController ->> ApiService: POST transaction
+    ApiService -->> DashboardController: Success/Failure response
+    DashboardController ->> SendMoneyScreen: Show success/failure message
+
