@@ -37,30 +37,6 @@ A Flutter application for sending money with offline support, using GetX for sta
    git clone https://github.com/prafulkorat/send_money_app
    cd send_money_app
 
-Directory Structure
-
-lib/
-├── main.dart
-├── models/
-│   ├── transaction_model.dart
-│   └── user_model.dart
-├── views/
-│   ├── login_screen.dart
-│   ├── dashboard_screen.dart
-│   ├── send_money_screen.dart
-│   └── transaction_history_screen.dart
-├── controllers/
-│   ├── auth_controller.dart
-│   ├── dashboard_controller.dart
-│   └── transactions_controller.dart
-├── services/
-│   ├── api_service.dart
-│   └── local_storage_service.dart
-└── bindings/
-├── initial_binding.dart
-
-
-
 
 classDiagram
 
